@@ -9,4 +9,4 @@ if __name__ == "__main__":
     ventana = tk.Tk()
     Yeztli_app(ventana)    
     ventana.geometry("800x600")
-    ventana.mainloop()
+    ventana.mainloop() 

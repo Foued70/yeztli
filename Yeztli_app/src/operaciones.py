@@ -11,7 +11,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 from PIL import *
 from pylab import *
-from scipy.ndimage import measurements,morphology
+from scipy.ndimage import measurements,morphology 
 
 
 class FileChooser:
