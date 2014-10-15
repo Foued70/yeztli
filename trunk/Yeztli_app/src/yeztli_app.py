@@ -11,7 +11,7 @@ import numpy as np
 
 class Yeztli_app(tk.Frame):
     #la aplicacion deriva de tkinter es por eso que tenemos que llamar al
-    #constructor de tkinter
+    #constructor de tkinterHHHHHHH
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         self.parent = parent
