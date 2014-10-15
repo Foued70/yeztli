@@ -126,7 +126,7 @@ class Yeztli_app(tk.Frame):
 ##agregar a barra de menu a la ventana
 #ventana.config(menu=barraMenu)
 
-################## creacion de frames #################
+################## creacion de frames #################jjjj
 #derFrame = Frame(ventana, bg="red")
 #derFrame.pack(side=LEFT)
 #izqFrame = Frame(ventana, bg="blue")
