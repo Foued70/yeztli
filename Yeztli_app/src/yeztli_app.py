@@ -138,4 +138,4 @@ class Yeztli_app(tk.Frame):
 #dos.pack(fill=Y)
 
 
-#ventana.mainloop()
+#ventana.mainloop(   )
