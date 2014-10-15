@@ -79,7 +79,7 @@ class Yeztli_app(tk.Frame):
        self.resImg = self.img.resize((500, 400),Image.ANTIALIAS)
        imagen = ImageTk.PhotoImage(self.resImg)
        self.label1.configure(image=imagen)
-       self.label1.image = imagen
+       self.label1.image = imagen 
         
     
     

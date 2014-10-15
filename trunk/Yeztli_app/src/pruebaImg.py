@@ -6,7 +6,7 @@
 import cv2
 from vista.ventana import CrearVentana
 import sys
-from scipy.ndimage import measurements,morphology
+from scipy.ndimage import measurements,morphology 
 import numpy as np
 from PIL import *
 from pylab import *
