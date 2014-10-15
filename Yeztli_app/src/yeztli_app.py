@@ -139,9 +139,3 @@ class Yeztli_app(tk.Frame):
 
 
 #ventana.mainloop()
-
-
-
-
-
-
