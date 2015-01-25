@@ -27,6 +27,7 @@ class Ui_VentanaPrincipal(object):
         self.sure_bg = None
         self.posicionDes = 0
         self.memoria = ["1","2","3","4","5","6","7","8","9","10"]
+        self.numObjetos = 0
         
         
     def setupUi(self, VentanaPrincipal):
@@ -197,6 +198,8 @@ class Ui_VentanaPrincipal(object):
         self.actionEtiquetar.setObjectName(_fromUtf8("actionEtiquetar"))
         self.actionEliminar_objetos_de_los_bordes = QtGui.QAction(VentanaPrincipal)
         self.actionEliminar_objetos_de_los_bordes.setObjectName(_fromUtf8("actionEliminar_objetos_de_los_bordes"))
+        self.actionOperacion_And = QtGui.QAction(VentanaPrincipal)
+        self.actionOperacion_And.setObjectName(_fromUtf8("actionOperacion_And"))
         self.menuArchivo.addAction(self.actionAbrir)
         self.menuArchivo.addAction(self.actionGuardar)
         self.menuMetodo_Otsu.addSeparator()
@@ -228,6 +231,7 @@ class Ui_VentanaPrincipal(object):
         self.menuHistograma.addAction(self.actionEcualizacion_del_histograma)
         self.menuSegmentacion.addAction(self.actionEliminar_objetos_de_los_bordes)
         self.menuSegmentacion.addAction(self.actionEtiquetar)
+        self.menuSegmentacion.addAction(self.actionOperacion_And)
         self.menuSegmentacion.addSeparator()
         self.menuSegmentacion.addAction(self.actionWatershed)
         self.menuSegmentacion.addAction(self.actionDeteccionCirculo)
@@ -263,6 +267,8 @@ class Ui_VentanaPrincipal(object):
         self.actionRellenar_hoyos.triggered.connect(self.rellenarHoyos)
         self.actionWatershed.triggered.connect(self.watershed)
         self.actionDeteccionCirculo.triggered.connect(self.deteccionCirculos)
+        self.actionEliminar_objetos_de_los_bordes.triggered.connect(self.eliminarBordes)
+        self.actionOperacion_And.triggered.connect(self.operacionAnd)
         
         
         
@@ -326,6 +332,7 @@ class Ui_VentanaPrincipal(object):
         self.actionTrans_Rapida_de_distancia.setText(QtGui.QApplication.translate("VentanaPrincipal", "Trans. Rapida de distancia", None, QtGui.QApplication.UnicodeUTF8))
         self.actionEtiquetar.setText(QtGui.QApplication.translate("VentanaPrincipal", "Etiquetar", None, QtGui.QApplication.UnicodeUTF8))
         self.actionEliminar_objetos_de_los_bordes.setText(QtGui.QApplication.translate("VentanaPrincipal", "Eliminar objetos de los bordes", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionOperacion_And.setText(QtGui.QApplication.translate("VentanaPrincipal", "Operacion And", None, QtGui.QApplication.UnicodeUTF8))
         
 
     def abrirImg(self):
@@ -536,7 +543,7 @@ class Ui_VentanaPrincipal(object):
         if self.imgOriginal == None:
             QtGui.QMessageBox.warning(None,'Precaución','Debe abrir una imagen para usar esta operación.')
         else:
-            self.img = Metodos.watershed(self.img, self.sure_bg,self.imgOriginal)
+            self.img,self.numObjetos = Metodos.watershed(self.img, self.sure_bg,self.imgOriginal)
             self.agregarMemoria(self.img)
             q = QtGui.QPixmap.fromImage(self.imageOpenCv2ToQImage(self.img))
             self.labelImagenModificada.setPixmap(q) 
@@ -581,7 +588,7 @@ class Ui_VentanaPrincipal(object):
         if self.posicionDes < 10:
             print "memoria pos = ", self.posicionDes
             self.memoria[self.posicionDes]=self.img
-            print self.memoria[self.posicionDes][100,100]
+            #print self.memoria[self.posicionDes][100,100]
             self.posicionDes = self.posicionDes + 1
         else:
             self.posicionDes = 0
@@ -589,6 +596,18 @@ class Ui_VentanaPrincipal(object):
             self.memoria[self.posicionDes]=img
             print img[100,100]
             self.posicionDes = self.posicionDes + 1
+    
+    
+    
+    
+    def eliminarBordes(self):
+        if self.imgOriginal == None:
+            QtGui.QMessageBox.warning(None,'Precaución','Debe abrir una imagen para usar esta operación.')
+        else:
+            self.img = Metodos.eliminaObjOrillas(self.img)
+            self.agregarMemoria(self.img)
+            q = QtGui.QPixmap.fromImage(self.imageOpenCv2ToQImage(self.img))
+            self.labelImagenModificada.setPixmap(q)
         
     
     def deshacer(self):
@@ -604,4 +623,15 @@ class Ui_VentanaPrincipal(object):
             print "En imagen",self.img[100,100]
             print "En memoria",self.memoria[self.posicionDes][100,100]
             q = QtGui.QPixmap.fromImage(self.imageOpenCv2ToQImage(self.img))
-            self.labelImagenModificada.setPixmap(q)            
+            self.labelImagenModificada.setPixmap(q)
+            
+    def operacionAnd(self):
+        if self.imgOriginal == None:
+            QtGui.QMessageBox.warning(None,'Precaución','Debe abrir una imagen para usar esta operación.')
+        else:
+            #self.img = Metodos.operacionAnd(self.img,self.imgOriginal)
+            self.img = Metodos.obtenerObjetos(self.img,self.imgOriginal, self.numObjetos)
+            self.agregarMemoria(self.img)
+            q = QtGui.QPixmap.fromImage(self.imageOpenCv2ToQImage(self.img))
+            self.labelImagenModificada.setPixmap(q)
+        

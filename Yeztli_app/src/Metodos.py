@@ -7,6 +7,7 @@ from matplotlib import pyplot as plt
 from PyQt4 import QtGui
 import numpy as np
 from pylab import *
+import copy
 from scipy.ndimage import measurements
 #from skimage import morphology
 
@@ -417,7 +418,7 @@ def watershed(img,sure_bg,original):
     imshow(original)
     show()
     
-    return original
+    return np.uint8(ret),markers
 
 
 
@@ -449,7 +450,89 @@ def recorrerLabels(img,numLabels):
     for x in range(tam[0]):
             for y in range(tam[1]):
                 img[x,y] = img[x,y] + 1
-
     
     return imgAux
+
+
+#def eliminaObjOrillas(img):
+#        tam = img.shape
+#        alto = tam[0]
+#        ancho = tam[1]
+#        lista = []
+#        for x in range(ancho):
+#            
+#            valor = img[0][x]
+#            print "valor " ,valor
+#            #print valor
+#            if (np.logical_and(img[0][x],[255,255,255]).any()):
+#                if (img[0][x] in lista) == False:                
+#                    lista.append(img[0][x])
+#            if np.logical_and(img[alto - 1][x],[255,255,255]).any():
+#                if (img[alto - 1][x] in lista) == False:
+#                    lista.append(img[alto -1][x])
+#        for x in range(alto):
+#            if np.logical_and(img[x][0],[255,255,255]).any():
+#                if (img[x][0] in lista) == False:
+#                    lista.append(img[x][0])
+#            if np.logical_and(img[x][ancho - 1],[255,255,255]).any():
+#                if (img[x][ancho - 1] in lista) == False:
+#                    lista.append(img[x][ancho - 1])
+#        for x in range(alto):
+#            for y in range(ancho):
+#                valor = img[x][y]
+#                if (valor in lista) == True:
+#                    print x," ",y," ",img[x][y]
+#                    img[x][y] = 0
+#        return img
+
     
+    
+def eliminaObjOrillas(img):
+        print img.shape
+        tam = img.shape
+        alto = tam[0]
+        ancho = tam[1]
+        lista = []
+        for x in range(ancho):
+            if (img[0][x] != 0) and ((img[0][x] in lista) == False):
+                lista.append(img[0][x])
+            if (img[alto - 1][x] != 0) and ((img[alto - 1][x] in lista) == False):
+                lista.append(img[alto -1][x])
+        for x in range(alto):
+            if (img[x][0] != 0) and ((img[x][0] in lista) == False):
+                lista.append(img[x][0])
+            if (img[x][ancho - 1] != 0) and ((img[x][ancho - 1] in lista) == False):
+                lista.append(img[x][ancho - 1])
+        for x in range(alto):
+            for y in range(ancho):
+                valor = img[x][y]
+                if (valor in lista) == True:
+                    img[x][y] = 0
+        return img    
+    
+
+
+def operacionAnd(img, imgOriginal):
+    if len(imgOriginal.shape) == 3:            
+        imgOriginal = cv2.cvtColor(imgOriginal, cv2.COLOR_BGR2GRAY)
+        print "convirtio la imagen a grises"
+        
+    img = cv2.bitwise_and(img,imgOriginal)
+    return img
+
+
+def obtenerObjetos(img, imgOriginal,numObjetos):
+    
+    imgOtsu = otsuColor(imgOriginal) 
+    
+    for x in range(3,numObjetos):
+        imgAux = copy.deepcopy(imgOtsu)
+        print "objeto num ", x
+        imgAux[img != x] = 0        
+        imshow(imgAux)
+        show()        
+        
+    return img
+    
+    
+
