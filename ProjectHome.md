@@ -1,0 +1,1 @@
+aplicacion de escritorio que detecta anomalias en celulas sanguineas mediante analisis de imagenes y reconocimiento de patrones usando openCV
